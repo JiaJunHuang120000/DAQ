@@ -1,0 +1,31 @@
+### Equipment Requirement
+- Raspberry Pi 5 with Ethernet HAT
+- Arduino Uno 3 with Ethernet Shield, Uno settings
+- Janus FERS v4.1.2
+- Python: numpy, akward, matplotlib
+
+### Data Acquisition on Pi
+It is recommanded to use <screen> or <tmux> to run the .py or .sh script for data to be continuosly collected in Pi, since running on ssh terminal will possiblily to be interupted by connection stability.
+
+## Ardurino: Temperature/Humidity & Gyroscope
+Arduinos are connected via Ethernet port to PoE hub. This requires a pre-set data collection to be imported into each ardurino before the DAQ begins.
+Each Arduino have a unique ip and id number, and outputs into different data file for identification.
+```
+screen
+
+cd hardware/
+bash log.sh
+
+```
+
+## CAEN: Multi-Detector DAQ
+Each chain of CAEN operates as separate detectors, such the settings file have to account for all of the different parameters; HV bias, gains, threshold, etc..., before running the full daisy chain.
+There are two types of test that iterates alternativly; ptrg, tlogic. Such that for the 'Janus_Config.txt' file that will preset in the gui, <cp 'path to'/Janus_Config.txt ~/DAQ/hardware/cosmic.txt>, and please change the triggering logic and saving path to PTRG for the <ptrg.txt>. If needed please do <diff ptrg.txt cosmic.txt> to check the difference in the settings.
+Enabling the scripts will start with ptrg for <10 s> and continue to tlogic for <30 min>, that can be changed in the <looping.py>. You can check the rate using the python scipt in <python/>.
+```
+screen
+
+cd hardware/
+python3 looping.py
+```
+
